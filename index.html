@@ -2,6 +2,7 @@
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shop</title>
 
     <style>
@@ -12,7 +13,7 @@
       }
 
       .header {
-        background-color: #4caf50;
+        background-color: #06ca82;
         padding: 10px 18px;
         display: flex;
         align-items: center;
@@ -43,7 +44,7 @@
         width: 6px !important;
       }
       .container::-webkit-scrollbar-thumb {
-        background: #4caf50 !important;
+        background: #06ca82 !important;
         border-radius: 2px !important;
       }
 
@@ -103,12 +104,13 @@
         font-family: math;
         font-weight: 600;
         margin: 0;
+        margin-bottom: 15px;
       }
       .product-desc {
         font-size: 10px;
         color: #555;
-        /* margin: 4px 0; */
-        height: 22px;
+        margin: 0;
+        height: 23px;
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
@@ -132,19 +134,19 @@
         font-weight: 600;
       }
       .product-button {
-        background-color: #4caf50;
+        background-color: #06ca82;
         color: white;
         border: none;
         border-radius: 4px;
         cursor: pointer;
-        width: 24px;
-        height: 24px;
-        font-size: 16px;
-        font-weight: 800;
+        width: 28px;
+        height: 28px;
+        font-size: 20px;
+        font-weight: 700;
       }
 
       .product-price {
-        color: #4caf50;
+        color: #06ca82;
         font-weight: bold;
         margin: 0;
       }
@@ -171,7 +173,7 @@
         font-size: 18px;
         font-weight: 600;
         margin: 0;
-        color: #4caf50;
+        color: #06ca82;
       }
       .quantity {
         font-size: 14px;
@@ -180,7 +182,7 @@
       }
 
       .b {
-        background-color: #4caf50;
+        background-color: #06ca82;
         color: white;
         border: none;
         border-radius: 4px;
@@ -194,13 +196,13 @@
       }
       .cart-badge {
         position: absolute;
-        top: -10px;
-        right: -10px;
-        background: rgb(6, 105, 6);
+        top: -8px;
+        right: -8px;
+        background: rgb(255, 0, 72);
         color: white;
         border-radius: 50%;
-        min-width: 20px;
-        height: 20px;
+        min-width: 18px;
+        height: 18px;
         font-size: 10px;
         display: flex;
         align-items: center;
@@ -221,7 +223,7 @@
       }
       .search:focus {
         outline: none;
-        border-color: #4caf50;
+        border-color: #06ca82;
         box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
       }
 
@@ -232,7 +234,7 @@
         position: fixed;
         top: 0;
         left: 0;
-        background-color: #4caf50;
+        background-color: #06ca82;
         overflow-x: hidden;
         padding-top: 20px;
         transform: translateX(-250px); /* yashirin holat */
@@ -324,7 +326,7 @@
         left: 4px;
         width: calc(50% - 4px);
         height: calc(100% - 8px);
-        background: #377e3a;
+        background: #03a167;
         border-radius: 8px;
         transition: transform 0.3s ease;
         z-index: 1;
@@ -397,17 +399,19 @@
         padding: 16px;
         border-radius: 8px;
         /* max-width: 80%; */
-        max-width: 320px;
+        max-width: 300px;
         position: relative;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
       }
       .modal-content img {
         max-width: 100%;
         height: auto;
+        max-height: 320px;
         border-radius: 4px;
       }
-      .modal-info {
-        margin-top: 12px;
-      }
+      
       .close-btn {
         position: absolute;
         top: 6px;
@@ -417,14 +421,35 @@
         cursor: pointer;
       }
       .m-name {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 600;
         text-align: center;
+        margin: 10px 0;
       }
       .m-desc {
-        font-size: 12px;
+        font-size: 11px;
         color: #555;
+        line-height: 14px;
         margin: 0;
+      }
+      .empty-box {
+        height: calc(100vh - 150px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+      .empty-text {
+        margin: 0;
+        color: #06ca82;
+        font-size: 20px;
+      }
+      .empty-icon {
+        width: 200px;
+        height: 200px;
+      }
+      #modalDesc {
+        white-space: pre-line;
       }
     </style>
   </head>
@@ -469,7 +494,7 @@
             </div>
             <button class="call-btn" style="background: transparent">
               <img class="menu-icon" src="./icons/phone.svg" alt="" />
-              <a href="tel:+1234567890" id="contact"> Связаться с нами</a>
+              <a href="tel:+998999445459" id="contact"> Связаться с нами</a>
             </button>
           </div>
         </div>
@@ -516,7 +541,7 @@
                 <span class="quantity" id="quantity"></span>
               </div>
             </div>
-            <button class="b" id="order">Оформить</button>
+            <button class="b" id="order">Заказать</button>
           </div>
         </div>
       </div>
@@ -549,7 +574,7 @@
           "Главная",
           "Заказы",
           "Корзина",
-          "Оформить",
+          "Заказать",
           "Здесь пока пусто",
           "Здесь пока пусто",
           "Количество товаров:",
@@ -611,6 +636,7 @@
         sidebar.classList.remove("open");
         overlay.classList.remove("show");
       });
+
       let lang = "ru";
       const langButtons = document.querySelectorAll(".language-switcher .lang");
       async function getUser() {
@@ -647,17 +673,8 @@
           langButtons.forEach((b) => b.classList.remove("active"));
           btn.classList.add("active");
           lang = btn.textContent.toLowerCase();
-
-          const selectedLang = btn.textContent;
-          await fetch(`${API_URL}/users/${user?.id || "8149535541"}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ lang: selectedLang.toLowerCase() }),
-          });
-          // await getUser();
-          const curEl = document.getElementById("cur");
-          const currency = lang === "uz" ? "so'm" : "сум";
-          curEl.innerText = `${currency}`;
+          await renderProducts(productsData);
+          await renderCartItems(cartsData);
           const searchInput = document.getElementById("searchInput");
           if (lang === "uz") searchInput.placeholder = "Mahsulot izlash...";
           else searchInput.placeholder = "Искать товары";
@@ -667,8 +684,17 @@
               el.textContent = translations[lang][index];
             }
           });
-          await renderProducts(productsData);
-          await renderCartItems(cartsData);
+
+          const selectedLang = btn.textContent;
+          const curEl = document.getElementById("cur");
+          const currency = lang === "uz" ? "so'm" : "сум";
+          curEl.innerText = `${currency}`;
+
+          await fetch(`${API_URL}/users/${user?.id || "8149535541"}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ lang: selectedLang.toLowerCase() }),
+          });
         });
       });
 
@@ -715,16 +741,6 @@
           minusBtn.classList.add("hidden");
         }
       });
-
-      // productsContainer.addEventListener("click", (e) => {
-      //   if (!e.target.classList.contains("product-title")) return;
-      //   console.log("Title clicked");
-      //   const id = e.target.dataset.id;
-      //   const product = productsData.find((p) => p.id == id);
-      //   if (!product) return;
-
-      //   openProductDetail(product);
-      // });
 
       function openProductDetail(product) {
         document.getElementById("products").classList.add("hidden");
@@ -813,6 +829,17 @@
         );
         const data = await response.json();
 
+        const cartsContainer = document.getElementById("carts");
+        cartsContainer.innerHTML = "";
+        if (response.status !== 200 || !data.items.length) {
+          document.getElementById("cartFooter").classList.add("hidden");
+          cartsContainer.innerHTML =
+            "<div class='empty-box'><img src='./icons/box.svg' alt='Bo'sh savat' class='empty-icon' /><p class='empty-text' id='empty1'>Здесь пока пусто</p></div>";
+          return;
+        } else {
+          document.getElementById("cartFooter").classList.remove("hidden");
+        }
+
         cart = {};
         data.items.forEach((item) => {
           cart[item.product_id] = item.quantity;
@@ -820,7 +847,12 @@
 
         cartsData = data.items;
 
-        // umumiy quantity va total hisoblash
+        if (data.items.length === 0) {
+          productsData.forEach((p) => {
+            cart[p.id] = 0;
+          });
+        }
+
         const totalEl = document.getElementById("total");
         const curEl = document.getElementById("cur");
 
@@ -848,15 +880,6 @@
         cartsContainer.innerHTML = "";
         updateCartBadge();
 
-        if (items.length === 0) {
-          document.getElementById("cartFooter").classList.add("hidden");
-          cartsContainer.innerHTML =
-            "<div style='height:calc(100vh - 150px); display:flex; align-items: center; justify-content: center; flex-direction:column;'><img src='./icons/box.svg' alt='Bo'sh savat' style='width: 200px; height: 200px;' /><p style='margin:0; color:#4caf50; font-size: 20px;' id='empty1'>Здесь пока пусто</p></div>";
-          return;
-        } else {
-          document.getElementById("cartFooter").classList.remove("hidden");
-        }
-
         items.forEach((item) => {
           const product = productsData.find((p) => p.id === item.product_id);
           if (!product) return;
@@ -869,31 +892,33 @@
           const cartItem = document.createElement("div");
           cartItem.className = "cart-item";
           cartItem.innerHTML = `
-      <img class="product-image" src="${
-        product.photo
-      }" data-name="${productName}" data-desc="${productDesc}">
-      <div class="product-info">
-        <p class="product-title">${productName}</p>
-        <p class="product-desc">${productDesc}</p>
-        <div class="spacer">
-          <div style="display: flex; flex-direction: column;">
-          <p style="margin:0; font-size:12px; color:#555; font-weight:600">${product.price.toLocaleString()} ${currency}</p>
-          <p class="product-price">${(
-            product.price * item.quantity
-          ).toLocaleString()} ${currency}</p>
-          </div>
-          <div class="product-action">
-            <button class="product-button minusc" data-id="${
-              product.id
-            }">-</button>
-            <span class="count" id="count-${product.id}">${item.quantity}</span>
-            <button class="product-button plusc" data-id="${
-              product.id
-            }">+</button>
+        <img class="product-image" src="${
+          product.photo
+        }" data-name="${productName}" data-desc="${productDesc}">
+        <div class="product-info">
+          <p class="product-title">${productName}</p>
+          <p class="product-desc">${productDesc}</p>
+          <div class="spacer">
+            <div style="display: flex; flex-direction: column;">
+            <p style="margin:0; font-size:12px; color:#555; font-weight:600">${product.price.toLocaleString()} ${currency}</p>
+            <p class="product-price">${(
+              product.price * item.quantity
+            ).toLocaleString()} ${currency}</p>
+            </div>
+            <div class="product-action">
+              <button class="product-button minusc" data-id="${
+                product.id
+              }">-</button>
+              <span class="count" id="count-${product.id}">${
+            item.quantity
+          }</span>
+              <button class="product-button plusc" data-id="${
+                product.id
+              }">+</button>
+            </div>
           </div>
         </div>
-      </div>
-    `;
+      `;
           cartsContainer.appendChild(cartItem);
           cartsData.forEach((item) => {
             const qty = cart[item.product_id] || 0;
@@ -921,7 +946,6 @@
           await updateCart(productId, -1);
         }
       });
-
       async function updateCart(productId, change) {
         await fetch(`${API_URL}/cart/update`, {
           method: "POST",
@@ -934,7 +958,22 @@
             change: change,
           }),
         });
-
+        p = cart[productId];
+        if (p == 1 && change == -1) {
+          cart[productId] = 0;
+        }
+        updateCartBadge();
+        const countEl = document.getElementById(`count-${productId}`);
+        const minusBtn = document.querySelector(
+          `.minus[data-id="${productId}"]`
+        );
+        if (cart[productId] > 0) {
+          countEl.classList.remove("hidden");
+          minusBtn.classList.remove("hidden");
+        } else {
+          countEl.classList.add("hidden");
+          minusBtn.classList.add("hidden");
+        }
         await getCarts();
       }
 
@@ -951,23 +990,30 @@
 
       async function loadProducts(search = "") {
         const url = search
-          ? `${API_URL}/products?search=${encodeURIComponent(search)}`
+          ? `${API_URL}/products?search=${encodeURIComponent(search)}_${lang}`
           : `${API_URL}/products`;
 
         const response = await fetch(url);
         let products = await response.json();
-        products = products.filter((p) => p.is_active);
-
-        productsData = products;
-        renderProducts(products);
-        getCarts();
-      }
-      function renderProducts(products) {
         productsContainer.innerHTML = "";
-        if (products.length === 0) {
+        if (response.status !== 200) {
           document.getElementById("searchInput").classList.add("hidden");
           productsContainer.innerHTML =
-            "<div style='height:calc(100vh - 150px); display:flex; align-items: center; justify-content: center; flex-direction:column;'><img src='./icons/box.svg' alt='Bo'sh savat' style='width: 200px; height: 200px;' /><p style='margin:0; color:#4caf50; font-size: 20px;' id='empty2'>Здесь пока пусто</p></div>";
+            "<div class='empty-box'><img src='./icons/box.svg' alt='Bo'sh savat' class='empty-icon' /><p class='empty-text' id='empty2'>Здесь пока пусто</p></div>";
+        } else {
+          document.getElementById("searchInput").classList.remove("hidden");
+          products = products.filter((p) => p.is_active);
+          productsData = products;
+          getCarts();
+          renderProducts(products, search);
+        }
+      }
+      function renderProducts(products, search = "") {
+        productsContainer.innerHTML = "";
+        if (!products.length && !search) {
+          document.getElementById("searchInput").classList.add("hidden");
+          productsContainer.innerHTML =
+            "<div class='empty-box'><img src='./icons/box.svg' alt='Bo'sh savat' class='empty-icon' /><p class='empty-text' id='empty2'>Здесь пока пусто</p></div>";
         } else {
           document.getElementById("searchInput").classList.remove("hidden");
         }
@@ -984,30 +1030,30 @@
           card.className = "card";
 
           card.innerHTML = `
-      <img class="product-image" src="${
-        product.photo
-      }" data-name="${productName}" data-desc="${productDesc}">
-      <div class="product-info">
-        <p class="product-title" data-id="${product.id}">
-          ${productName}
-        </p>
-        <p class="product-desc">${productDesc}</p>
-        <div class="spacer">
-          <p class="product-price">
-            ${product.price.toLocaleString()} ${currency}
+        <img class="product-image" src="${
+          product.photo
+        }" data-name="${productName}" data-desc="${productDesc}">
+        <div class="product-info">
+          <p class="product-title" data-id="${product.id}">
+            ${productName}
           </p>
-          <div class="product-action">
-            <button class="product-button minus hidden" data-id="${
-              product.id
-            }">-</button>
-            <span class="count hidden" id="count-${product.id}">0</span>
-            <button class="product-button plus" data-id="${
-              product.id
-            }">+</button>
+          <p class="product-desc">${productDesc}</p>
+          <div class="spacer">
+            <p class="product-price">
+              ${product.price.toLocaleString()} ${currency}
+            </p>
+            <div class="product-action">
+              <button class="product-button minus hidden" data-id="${
+                product.id
+              }">-</button>
+              <span class="count hidden" id="count-${product.id}">0</span>
+              <button class="product-button plus" data-id="${
+                product.id
+              }">+</button>
+            </div>
           </div>
         </div>
-      </div>
-    `;
+      `;
 
           productsContainer.appendChild(card);
         });
