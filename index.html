@@ -506,6 +506,7 @@
     </style>
   </head>
   <body>
+    <div style="height: 100vh; display: flex; align-items: center; justify-content: center;" class="hidden" id="pageNotFound"><img src="./icons/image.png" style="width: 80%;"></div>
     <div class="header">
       <img class="menu-icon" id="burger" src="./icons/menu.svg" alt="" />
       <img class="brand" src="icons/shore_logo.png" alt="" />
@@ -614,11 +615,16 @@
     <script>
       const tg = window.Telegram.WebApp;
       const API_URL = "https://shomedic.uz/api";
-      // const API_URL ="http://127.0.0.1:8000/api"
       tg.ready();
-
+      
       const user = tg.initDataUnsafe.user;
-
+      
+      // page_not_found = document.getElementById("pageNotFound");
+      // if(user?.id){
+      //   page_not_found.classList.add("hidden");
+      // } else {
+      //   page_not_found.classList.remove("hidden");
+      // }
       const productsContainer = document.getElementById("productsList");
       let cart = {};
       let productsData = [];
