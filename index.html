@@ -134,6 +134,7 @@
         font-weight: 600;
       }
       .product-button {
+        position: relative;
         background-color: #06ca82;
         color: white;
         border: none;
@@ -182,6 +183,7 @@
       }
 
       .b {
+        position: relative;
         background-color: #06ca82;
         color: white;
         border: none;
@@ -411,7 +413,7 @@
         max-height: 320px;
         border-radius: 4px;
       }
-      
+
       .close-btn {
         position: absolute;
         top: 6px;
@@ -450,6 +452,56 @@
       }
       #modalDesc {
         white-space: pre-line;
+      }
+
+      /* HTML: <div class="loader"></div> */
+      .loader {
+        width: 50px;
+        aspect-ratio: 1;
+        display: grid;
+      }
+      .loader::before,
+      .loader::after {
+        content: "";
+        grid-area: 1/1;
+        --c: no-repeat radial-gradient(farthest-side, #06ca82 92%, #0000);
+        background: var(--c) 50% 0, var(--c) 50% 100%, var(--c) 100% 50%,
+          var(--c) 0 50%;
+        background-size: 12px 12px;
+        animation: l12 1s infinite;
+      }
+      .loader::before {
+        margin: 4px;
+        filter: hue-rotate(45deg);
+        background-size: 8px 8px;
+        animation-timing-function: linear;
+      }
+
+      @keyframes l12 {
+        100% {
+          transform: rotate(0.5turn);
+        }
+      }
+
+      .btn-loader {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #3498db;
+        border-radius: 50%;
+        width: 12px;
+        height: 12px;
+        animation: spin 1s linear infinite;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -8px 0 0 -8px;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
     </style>
   </head>
@@ -514,6 +566,18 @@
       </div>
       <div class="products" id="products">
         <input placeholder="Искать товары" class="search" id="searchInput" />
+        <div
+          class="hidden"
+          style="
+            height: calc(100vh - 150px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          "
+          id="loadingIndicator"
+        >
+          <div class="loader"></div>
+        </div>
         <div id="productsList" class="products"></div>
       </div>
       <div class="hidden" id="product">
@@ -550,6 +614,7 @@
     <script>
       const tg = window.Telegram.WebApp;
       const API_URL = "https://shomedic.uz/api";
+      // const API_URL ="http://127.0.0.1:8000/api"
       tg.ready();
 
       const user = tg.initDataUnsafe.user;
@@ -714,17 +779,41 @@
       productsContainer.addEventListener("click", async (e) => {
         const id = e.target.dataset.id;
         if (!id) return;
+        const loaderpl = document.getElementById(`loader-${id}-pl`);
+        const loadermin = document.getElementById(`loader-${id}-min`);
 
         if (!cart[id]) cart[id] = 0;
 
         if (e.target.classList.contains("plus")) {
-          const productId = e.target.dataset.id;
-          await updateCart(productId, 1);
+          loaderpl.classList.remove("hidden");
+          e.target.disabled = true;
+          e.target.innerHTML = `<span class="btn-loader" id="loader-${id}-pl"></span>`;
+          try {
+            const productId = e.target.dataset.id;
+            await updateCart(productId, 1);
+          } catch (error) {
+            console.error("Savatchaga qo'shishda xatolik:", error);
+          } finally {
+            loaderpl.classList.add("hidden");
+            e.target.disabled = false;
+            e.target.innerHTML = `+<span class="btn-loader hidden" id="loader-${id}-pl"></span>`;
+          }
         }
 
         if (e.target.classList.contains("minus")) {
-          const productId = e.target.dataset.id;
-          await updateCart(productId, -1);
+          loadermin.classList.remove("hidden");
+          e.target.disabled = true;
+          e.target.innerHTML = `<span class="btn-loader" id="loader-${id}-min"></span>`;
+          try {
+            const productId = e.target.dataset.id;
+            await updateCart(productId, -1);
+          } catch (error) {
+            console.error("Savatchadan olib tashlashda xatolik:", error);
+          } finally {
+            loadermin.classList.add("hidden");
+            e.target.disabled = false;
+            e.target.innerHTML = `-<span class="btn-loader hidden" id="loader-${id}-min"></span>`;
+          }
         }
         updateCartBadge();
 
@@ -908,13 +997,17 @@
             <div class="product-action">
               <button class="product-button minusc" data-id="${
                 product.id
-              }">-</button>
+              }">-<span class="btn-loader hidden" id="loader-${
+            product.id
+          }-minc"></span></button>
               <span class="count" id="count-${product.id}">${
             item.quantity
           }</span>
               <button class="product-button plusc" data-id="${
                 product.id
-              }">+</button>
+              }">+<span class="btn-loader hidden" id="loader-${
+            product.id
+          }-plc"></span></button>
             </div>
           </div>
         </div>
@@ -936,14 +1029,40 @@
       }
 
       document.addEventListener("click", async (e) => {
+        const id = e.target.dataset.id;
+        if (!id) return;
+        const loaderpl = document.getElementById(`loader-${id}-plc`);
+        const loadermin = document.getElementById(`loader-${id}-minc`);
         if (e.target.classList.contains("plusc")) {
-          const productId = e.target.dataset.id;
-          await updateCart(productId, 1);
+          loaderpl.classList.remove("hidden");
+          e.target.disabled = true;
+          e.target.innerHTML = `<span class="btn-loader" id="loader-${id}-pl"></span>`;
+          try {
+            const productId = e.target.dataset.id;
+            await updateCart(productId, 1);
+          } catch (error) {
+            console.error("Savatchaga qo'shishda xatolik:", error);
+          } finally {
+            loaderpl.classList.add("hidden");
+            e.target.disabled = false;
+            e.target.innerHTML = `+<span class="btn-loader hidden" id="loader-${id}-pl"></span>`;
+          }
         }
 
         if (e.target.classList.contains("minusc")) {
-          const productId = e.target.dataset.id;
-          await updateCart(productId, -1);
+          loadermin.classList.remove("hidden");
+          e.target.disabled = true;
+          e.target.innerHTML = `<span class="btn-loader" id="loader-${id}-min"></span>`;
+          try {
+            const productId = e.target.dataset.id;
+            await updateCart(productId, -1);
+          } catch (error) {
+            console.error("Savatchadan olib tashlashda xatolik:", error);
+          } finally {
+            loadermin.classList.add("hidden");
+            e.target.disabled = false;
+            e.target.innerHTML = `-<span class="btn-loader hidden" id="loader-${id}-min"></span>`;
+          }
         }
       });
       async function updateCart(productId, change) {
@@ -989,23 +1108,30 @@
       });
 
       async function loadProducts(search = "") {
-        const url = search
-          ? `${API_URL}/products?search=${encodeURIComponent(search)}_${lang}`
-          : `${API_URL}/products`;
-
-        const response = await fetch(url);
-        let products = await response.json();
+        const loading = document.getElementById("loadingIndicator");
+        loading.classList.remove("hidden");
         productsContainer.innerHTML = "";
-        if (response.status !== 200) {
-          document.getElementById("searchInput").classList.add("hidden");
-          productsContainer.innerHTML =
-            "<div class='empty-box'><img src='./icons/box.svg' alt='Bo'sh savat' class='empty-icon' /><p class='empty-text' id='empty2'>Здесь пока пусто</p></div>";
-        } else {
-          document.getElementById("searchInput").classList.remove("hidden");
-          products = products.filter((p) => p.is_active);
-          productsData = products;
-          getCarts();
-          renderProducts(products, search);
+        try {
+          const url = search
+            ? `${API_URL}/products?search=${encodeURIComponent(search)}_${lang}`
+            : `${API_URL}/products`;
+
+          const response = await fetch(url);
+          let products = await response.json();
+
+          if (response.status !== 200) {
+            document.getElementById("searchInput").classList.add("hidden");
+            productsContainer.innerHTML =
+              "<div class='empty-box'><img src='./icons/box.svg' alt='Bo'sh savat' class='empty-icon' /><p class='empty-text' id='empty2'>Здесь пока пусто</p></div>";
+          } else {
+            document.getElementById("searchInput").classList.remove("hidden");
+            products = products.filter((p) => p.is_active);
+            productsData = products;
+            getCarts();
+            renderProducts(products, search);
+          }
+        } finally {
+          loading.classList.add("hidden");
         }
       }
       function renderProducts(products, search = "") {
@@ -1045,11 +1171,15 @@
             <div class="product-action">
               <button class="product-button minus hidden" data-id="${
                 product.id
-              }">-</button>
+              }">-<span class="btn-loader hidden" id="loader-${
+            product.id
+          }-min"></span></button>
               <span class="count hidden" id="count-${product.id}">0</span>
               <button class="product-button plus" data-id="${
                 product.id
-              }">+</button>
+              }">+ <span class="btn-loader hidden" id="loader-${
+            product.id
+          }-pl"></span></button>
             </div>
           </div>
         </div>
